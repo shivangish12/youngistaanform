@@ -1,273 +1,488 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Volunteer & Children Form</title>
+    <title>Activity Form</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       body {
-        font-family: Arial, sans-serif;
-        margin: 40px;
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #eceff1, #f5f7fa);
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
       }
+
+      #activityForm {
+        background-color: #ffffff;
+        padding: 30px 40px;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        width: 650px;
+      }
+
+      h2 {
+        text-align: center;
+        color: #1a237e;
+        margin-bottom: 30px;
+        font-weight: 700;
+      }
+
       label {
         display: block;
-        margin: 5px 0;
+        margin-top: 18px;
+        font-weight: 500;
+        color: #3f51b5;
+        font-size: 15px;
       }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="date"],
+      select {
+        width: 100%;
+        padding: 12px 14px;
+        margin-top: 6px;
+        border-radius: 8px;
+        border: 1px solid #b0bec5;
+        box-sizing: border-box;
+        font-size: 14px;
+        transition: all 0.2s ease-in-out;
+      }
+
+      input[type="text"]:focus,
+      input[type="number"]:focus,
+      input[type="date"]:focus,
+      select:focus {
+        border-color: #303f9f;
+        box-shadow: 0 0 5px rgba(63, 63, 159, 0.3);
+        outline: none;
+      }
+
+      #groupsFormedSection {
+        margin-top: 15px;
+      }
+
+      button {
+        margin-top: 30px;
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        background-color: #3f51b5;
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+      }
+
+      button:hover {
+        background-color: #303f9f;
+        transform: translateY(-2px);
+      }
+      #childrenCheckboxes,
+      #volunteersCheckboxes,
+      #staffCheckboxes {
+        display: flex;
+        flex-direction: column; /* each checkbox on a new line */
+        margin-top: 6px;
+      }
+
+      #childrenCheckboxes label,
+      #volunteersCheckboxes label,
+      #staffCheckboxes label {
+        display: inline-flex; /* checkbox + text horizontally */
+        align-items: center; /* vertically align checkbox and text */
+        gap: 8px; /* space between checkbox and name */
+        margin-bottom: 4px; /* space between rows */
+        color: #333; /* text color */
+        font-size: 14px;
+      }
+
+      /* Checkbox container */
       .checkbox-group {
-        margin: 8px 0;
-        padding-left: 20px;
+        display: flex;
+        flex-direction: column; /* stack vertically */
+        margin-top: 6px;
       }
-      .section {
-        margin-top: 20px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #ccc;
+
+      /* Each checkbox + label */
+      .checkbox-group label {
+        display: flex;
+        align-items: center;
+        color: #333; /* default text color */
+        font-weight: 400;
+        font-size: 14px;
+        margin-bottom: 4px; /* space between rows */
+      }
+
+      .checkbox-group input[type="checkbox"] {
+        margin-right: 8px; /* space between checkbox and name */
+      }
+
+      #otherStaffContainer input {
+        margin-top: 6px;
+      }
+
+      @media (max-width: 700px) {
+        #activityForm {
+          width: 100%;
+          padding: 20px;
+        }
       }
     </style>
   </head>
-  <body>
-    <h2>Volunteer & Children Selection Form</h2>
 
-    <div class="section">
-      <label>Category:</label>
-      <select id="category">
-        <option value="">-- Select Category --</option>
-        <option value="Activity">Activity</option>
-        <option value="Milestone">Milestone</option>
-        <option value="Goal">Goal</option>
+  <body>
+    <form id="activityForm">
+      <h2>Activity Form</h2>
+
+      <!-- OBJECTIVE -->
+      <label>Objective:</label>
+      <select id="objectiveSelect" name="dsk" required>
+        <option value="">Select Objective</option>
+        <option value="1">Objective 1</option>
+        <option value="2">Objective 2</option>
+        <option value="3">Objective 3</option>
       </select>
 
-      <div id="activityDiv" style="display: none">
-        <label>Activity:</label>
-        <select id="activity">
-          <option value="">-- Select Activity --</option>
-          <option value="Volunteers Conduct Sessions for Adolescents">
-            Volunteers Conduct Sessions for Adolescents
-          </option>
-          <option value="Trainings/Exposure Visits">
-            Trainings/Exposure Visits
-          </option>
-          <option
-            value="Events, Materials, Formation of Groups, Setting up of Centres"
-          >
-            Events, Materials, Formation of Groups, Setting up of Centres
-          </option>
-        </select>
-      </div>
+      <!-- ACTIVITY -->
+      <label>Activity:</label>
+      <select id="activitySelect" name="Activity" required>
+        <option value="">Select Activity</option>
+      </select>
 
-      <div id="indicatorDiv" style="display: none">
-        <label>Indicator:</label>
-        <select id="indicator">
-          <option value="">-- Select Indicator --</option>
-        </select>
-      </div>
+      <!-- INDICATOR -->
+      <label>Indicator:</label>
+      <select id="indicatorSelect" name="Indicator" required>
+        <option value="">Select Indicator</option>
+      </select>
+
+      <label>Upload Photo URL:</label>
+      <input type="text" name="UploadPhoto" />
 
       <label>Date:</label>
-      <input type="date" id="date" />
-
-      <label>Session Number:</label>
-      <input type="text" id="sessionNumber" />
+      <input type="date" name="Date" />
 
       <label>Location:</label>
-      <select id="location">
-        <option value="">Select Location</option>
-      </select>
+      <select name="Location" id="locationSelect"></select>
+
+      <label>Session Number:</label>
+      <input type="number" name="SessionNumber" />
+
+      <div id="groupsFormedSection" class="hidden">
+        <label>Number of groups Formed</label>
+        <input type="number" name="GroupsFormed" />
+      </div>
 
       <label>Age:</label>
-      <input type="number" id="age" placeholder="Enter age" min="1" />
-    </div>
+      <input type="number" id="ageFilter" name="Age" />
 
-    <div class="section">
-      <label>Volunteers:</label>
-      <div id="volunteersContainer" class="checkbox-group"></div>
-    </div>
+      <label>Gender:</label>
+      <select id="genderFilter">
+        <option value="">Any</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
 
-    <div class="section">
       <label>Children:</label>
-      <div id="childrenContainer" class="checkbox-group"></div>
-    </div>
+      <div id="childrenCheckboxes" class="checkbox-group"></div>
 
-    <div class="section">
+      <label>Volunteers:</label>
+      <div id="volunteersCheckboxes" class="checkbox-group"></div>
+
       <label>Staff Attendance:</label>
-      <div id="staffContainer" class="checkbox-group">
-        <label><input type="checkbox" value="Jesu" /> Jesu</label>
-        <label><input type="checkbox" value="Arun" /> Arun</label>
-        <label><input type="checkbox" value="Ruthvika" /> Ruthvika</label>
-        <label><input type="checkbox" value="Shrenika" /> Shrenika</label>
-        <label><input type="checkbox" value="Chandana" /> Chandana</label>
-        <label><input type="checkbox" value="Archana" /> Archana</label>
-        <label
-          ><input type="checkbox" value="Others" id="othersStaffCheckbox" />
-          Others</label
-        >
+      <div id="staffCheckboxes" class="checkbox-group">
+        <div>
+          <input
+            type="checkbox"
+            id="staff-Jesu"
+            value="Jesu"
+            name="StaffAttendance"
+          /><label for="staff-Jesu">Jesu</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="staff-Arun"
+            value="Arun"
+            name="StaffAttendance"
+          /><label for="staff-Arun">Arun</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="staff-Ruthvika"
+            value="Ruthvika"
+            name="StaffAttendance"
+          /><label for="staff-Ruthvika">Ruthvika</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="staff-Shrenika"
+            value="Shrenika"
+            name="StaffAttendance"
+          /><label for="staff-Shrenika">Shrenika</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="staff-Chandana"
+            value="Chandana"
+            name="StaffAttendance"
+          /><label for="staff-Chandana">Chandana</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="staff-Archana"
+            value="Archana"
+            name="StaffAttendance"
+          /><label for="staff-Archana">Archana</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="staff-Others"
+            value="Others"
+            name="StaffAttendance"
+          /><label for="staff-Others">Others</label>
+        </div>
       </div>
-      <div id="otherStaffDiv" style="display: none">
-        <label>Name of Staff:</label>
-        <input type="text" id="otherStaff" placeholder="Enter staff name" />
-      </div>
-    </div>
 
-    <button id="submitBtn" style="margin-top: 20px">Submit</button>
+      <div id="otherStaffContainer" class="hidden">
+        <label>Name of Staff (if Others selected):</label>
+        <input type="text" id="otherStaffName" name="OtherStaffName" />
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
 
     <script>
-      const scriptURL =
-        "https://script.google.com/macros/s/AKfycbx4GBM6tHcsdq9ab2ZGISkT90dS2HufeRDvXgawPQKtlVqxi8KI4ipgZePVDTyr-5iw/exec";
+      const api =
+        "https://script.google.com/macros/s/AKfycbyO6kDBRd_WwBZoxE9iFYLzvZSEd3c5F_dgMclWcSKQH45C1E42Glyq4u4C_hYOnU_FSw/exec";
 
-      const indicatorsMap = {
-        "Volunteers Conduct Sessions for Adolescents": [
-          "SEL Sessions for Adolescents",
-          "Gender Sessions for Girls",
-          "Career Guidance Sessions for Adolescents",
-          "Sessions on gender based violence and the referral mechanisms",
-          "Leadership training for Peer Leaders",
-        ],
-        "Trainings/Exposure Visits": [
-          "2 day training sessions & 2 day exposure visits for program staff, support staff",
-          "Weekend training sessions for volunteers",
-          "Monthly Training, planning and review meetings for project staff and volunteers",
-          "Facilitating exposure trips for peer leaders and program staff",
-        ],
-        "Events, Materials, Formation of Groups, Setting up of Centres": [
-          "Setting up adolescent centres in communities",
-          "Formation of adolescent groups",
-          "Summer Camp",
-          "Grand Finale of the Summer Camp where children showcase their learnings and talent",
-          "Sports Engagement for adolescent groups - Sports materials like Nets, Volleyballs, Badminton Rackets",
-          "Developing the module on Lifeskills and gender",
-        ],
-      };
+      let childrenList = [];
+      let volunteersList = [];
+      let locationList = [];
 
-      // Show/hide activity & indicator
-      document.getElementById("category").addEventListener("change", () => {
-        const cat = document.getElementById("category").value;
-        document.getElementById("activityDiv").style.display =
-          cat === "Activity" ? "block" : "none";
-        document.getElementById("indicatorDiv").style.display =
-          cat === "Activity" ? "block" : "none";
-        populateIndicator();
-      });
-
-      document
-        .getElementById("activity")
-        .addEventListener("change", populateIndicator);
-
-      function populateIndicator() {
-        const act = document.getElementById("activity").value;
-        const indicator = document.getElementById("indicator");
-        indicator.innerHTML =
-          '<option value="">-- Select Indicator --</option>';
-        if (indicatorsMap[act]) {
-          indicatorsMap[act].forEach((ind) => {
-            const opt = document.createElement("option");
-            opt.value = ind;
-            opt.textContent = ind;
-            indicator.appendChild(opt);
-          });
-        }
-      }
-
-      // Fetch locations on page load
-      window.onload = async () => {
-        try {
-          const res = await fetch(scriptURL);
-          const data = await res.json();
-          populateDropdown("location", data.locations);
-        } catch (err) {
-          console.error(err);
-        }
-      };
-
-      async function fetchData() {
-        const location = document.getElementById("location").value;
-        const age = document.getElementById("age").value;
-        try {
-          const res = await fetch(
-            `${scriptURL}?location=${location}&age=${age}`
-          );
-          const data = await res.json();
-          populateCheckboxes("volunteersContainer", data.volunteers);
-          populateCheckboxes("childrenContainer", data.children);
-        } catch (err) {
-          console.error(err);
-        }
-      }
-
-      function populateDropdown(id, items) {
-        const select = document.getElementById(id);
-        select.innerHTML = `<option value="">-- Select --</option>`;
-        items.forEach((item) => {
-          const option = document.createElement("option");
-          option.value = item;
-          option.textContent = item;
-          select.appendChild(option);
+      // Load API data
+      fetch(api)
+        .then((res) => res.json())
+        .then((data) => {
+          childrenList = data.children;
+          volunteersList = data.volunteers;
+          locationList = [
+            ...new Set([
+              ...childrenList.map((c) => c.region),
+              ...volunteersList.map((v) => v.location),
+            ]),
+          ];
+          renderLocations();
+          updateCheckboxes();
         });
+
+      function renderLocations() {
+        const locSelect = document.getElementById("locationSelect");
+        locSelect.innerHTML = locationList
+          .map((loc) => `<option value="${loc}">${loc}</option>`)
+          .join("");
       }
 
-      function populateCheckboxes(containerId, items) {
-        const container = document.getElementById(containerId);
+      function matchAgeGroup(ageGroup, age) {
+        if (!age || !ageGroup) return true;
+        const [min, max] = ageGroup.split("-").map(Number);
+        return age >= min && age <= max;
+      }
+
+      function renderChildrenCheckboxes(list) {
+        const container = document.getElementById("childrenCheckboxes");
         container.innerHTML = "";
-        items.forEach((item) => {
-          const label = document.createElement("label");
-          label.innerHTML = `<input type="checkbox" value="${item}" /> ${item}`;
-          container.appendChild(label);
+        list.forEach((c) => {
+          const id = "child-" + c.name.replace(/\s/g, "_");
+          container.innerHTML += `<div><input type="checkbox" id="${id}" value="${c.name}" name="Children"><label for="${id}">${c.name}</label></div>`;
         });
       }
 
-      document.getElementById("location").addEventListener("change", fetchData);
-      document.getElementById("age").addEventListener("input", fetchData);
-
-      // Show/hide other staff input
-      const othersCheckbox = document.getElementById("othersStaffCheckbox");
-      othersCheckbox.addEventListener("change", () => {
-        document.getElementById("otherStaffDiv").style.display =
-          othersCheckbox.checked ? "block" : "none";
-      });
-
-      // Submit: log selected data
-      document
-        .getElementById("submitBtn")
-        .addEventListener("click", async () => {
-          function getCheckedValues(containerId) {
-            return Array.from(
-              document
-                .getElementById(containerId)
-                .querySelectorAll("input[type=checkbox]:checked")
-            ).map((c) => c.value);
-          }
-
-          const formData = {
-            category: document.getElementById("category").value,
-            activity: document.getElementById("activity").value,
-            indicator: document.getElementById("indicator").value,
-            date: document.getElementById("date").value,
-            sessionNumber: document.getElementById("sessionNumber").value,
-            location: document.getElementById("location").value,
-            age: document.getElementById("age").value,
-            numberOfGroups: "", // Optional for now
-            volunteers: getCheckedValues("volunteersContainer"),
-            children: getCheckedValues("childrenContainer"),
-            staff: [
-              ...getCheckedValues("staffContainer"),
-              document.getElementById("otherStaff").value || "",
-            ].filter(Boolean),
-          };
-
-          try {
-            const res = await fetch(scriptURL, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(formData),
-            });
-
-            const result = await res.json();
-
-            if (result.success) {
-              alert("✅ Form submitted successfully!");
-              document.querySelector("form")?.reset?.(); // optional reset
-            } else {
-              alert("❌ Error saving data: " + result.error);
-            }
-          } catch (err) {
-            alert("⚠️ Network or script error: " + err.message);
-          }
+      function renderVolunteersCheckboxes(list) {
+        const container = document.getElementById("volunteersCheckboxes");
+        container.innerHTML = "";
+        list.forEach((v) => {
+          const id = "vol-" + v.name.replace(/\s/g, "_");
+          container.innerHTML += `<div><input type="checkbox" id="${id}" value="${v.name}" name="Volunteers"><label for="${id}">${v.name}</label></div>`;
         });
+      }
+
+      function updateCheckboxes() {
+        const selectedLocation =
+          document.getElementById("locationSelect").value || "";
+        const age = document.getElementById("ageFilter").value;
+        const gender = document.getElementById("genderFilter").value;
+
+        renderChildrenCheckboxes(
+          childrenList.filter(
+            (c) =>
+              (!selectedLocation || c.region === selectedLocation) &&
+              (!age || c.age == age) &&
+              (!gender || c.gender === gender)
+          )
+        );
+
+        renderVolunteersCheckboxes(
+          volunteersList.filter(
+            (v) =>
+              (!selectedLocation || v.location === selectedLocation) &&
+              matchAgeGroup(v.ageGroup, age)
+          )
+        );
+      }
+
+      document.getElementById("locationSelect").onchange = updateCheckboxes;
+      document.getElementById("ageFilter").oninput = updateCheckboxes;
+      document.getElementById("genderFilter").onchange = updateCheckboxes;
+
+      // Staff Others
+      document
+        .getElementById("staff-Others")
+        .addEventListener("change", function () {
+          document.getElementById("otherStaffContainer").style.display = this
+            .checked
+            ? "block"
+            : "none";
+          if (!this.checked)
+            document.getElementById("otherStaffName").value = "";
+        });
+
+      // Submit form
+      document
+        .getElementById("activityForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = new FormData(e.target);
+
+          // Children
+          const childrenSelected = Array.from(
+            document.querySelectorAll(
+              '#childrenCheckboxes input[name="Children"]:checked'
+            )
+          ).map((cb) => cb.value);
+
+          // Volunteers
+          const volunteersSelected = Array.from(
+            document.querySelectorAll(
+              '#volunteersCheckboxes input[name="Volunteers"]:checked'
+            )
+          ).map((cb) => cb.value);
+
+          // Staff
+          const staffSelected = Array.from(
+            document.querySelectorAll(
+              '#staffCheckboxes input[name="StaffAttendance"]:checked'
+            )
+          ).map((cb) => cb.value);
+
+          // Add Others if checked
+          if (document.getElementById("staff-Others").checked) {
+            const otherStaffName = document
+              .getElementById("otherStaffName")
+              .value.trim();
+            if (otherStaffName) staffSelected.push(otherStaffName);
+          }
+
+          // Set form data
+          form.set("Children", childrenSelected.join(", "));
+          form.set("Volunteers", volunteersSelected.join(", "));
+          form.set("StaffAttendance", staffSelected.join(", "));
+
+          // Optional: debug what is being sent
+          const formData = Object.fromEntries(form);
+          console.log("Submitting FormData:", formData);
+
+          await fetch(api, {
+            method: "POST",
+            body: JSON.stringify(formData),
+          });
+
+          alert("Form submitted successfully!");
+        });
+
+      // Objective → Activity → Indicator logic (keep your old code)
+      const objectiveData = {
+        1: {
+          "Volunteers Conduct Sessions for Adolescents": [
+            { indicator: "1.7 SEL Sessions for Adolescents" },
+            { indicator: "1.6 Gender Sessions for Girls" },
+            { indicator: "1.10 Career Guidance Sessions for Adolescents" },
+            { indicator: "1.8 Sessions on gender based violence" },
+            { indicator: "1.11 Leadership training for Peer Leaders" },
+          ],
+          "Trainings / Exposure Visits": [
+            { indicator: "1.1 2-day training sessions" },
+            { indicator: "1.2 Weekend training sessions" },
+            { indicator: "1.3 Monthly training & review meetings" },
+            { indicator: "1.13 Facilitating exposure trips" },
+          ],
+          "Events / Materials / Groups / Centres": [
+            { indicator: "1.4 Setting up adolescent centres" },
+            { indicator: "1.5 Formation of adolescent groups" },
+            { indicator: "1.14 Summer Camp" },
+            { indicator: "1.15 Grand Finale - Summer Camp" },
+            { indicator: "1.9 Sports engagement materials" },
+            { indicator: "1.12 Developing module on Lifeskills & gender" },
+          ],
+        },
+        2: {
+          "MHHM Activities": [
+            { indicator: "6 sessions for 4 batches of girls on MHHM" },
+            { indicator: "2 sessions for mothers on MHHM" },
+            { indicator: "2 medical check-ups by gynecologists" },
+            { indicator: "Upgrading module on MHHM & diet" },
+            { indicator: "Procurement of MHHM materials" },
+            { indicator: "Upload health reports/records" },
+          ],
+        },
+        3: {
+          "Community Strengthening & Gender Sensitisation": [
+            { indicator: "4 training sessions for slum committees" },
+            { indicator: "5 sessions for boys on gender sensitisation" },
+            { indicator: "Hosting 2 community events" },
+          ],
+        },
+      };
+
+      document.getElementById("objectiveSelect").onchange = function () {
+        const obj = this.value;
+        const activitySelect = document.getElementById("activitySelect");
+        activitySelect.innerHTML =
+          `<option value="">Select Activity</option>` +
+          Object.keys(objectiveData[obj] || {})
+            .map((act) => `<option>${act}</option>`)
+            .join("");
+        document.getElementById(
+          "indicatorSelect"
+        ).innerHTML = `<option value="">Select Indicator</option>`;
+      };
+
+      document.getElementById("activitySelect").onchange = function () {
+        const obj = document.getElementById("objectiveSelect").value;
+        const activity = this.value;
+        const indicatorSelect = document.getElementById("indicatorSelect");
+        indicatorSelect.innerHTML =
+          `<option value="">Select Indicator</option>` +
+          (objectiveData[obj][activity] || [])
+            .map((i) => `<option>${i.indicator}</option>`)
+            .join("");
+
+        const groupsSection = document.getElementById("groupsFormedSection");
+        groupsSection.style.display =
+          obj === "1" && activity === "Events / Materials / Groups / Centres"
+            ? "block"
+            : "none";
+      };
     </script>
   </body>
 </html>
