@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Activity Form</title>
+    <title>Youngistaan Activity Form</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
       rel="stylesheet"
@@ -14,34 +14,31 @@
         display: flex;
         justify-content: center;
       }
-
-      #activityForm {
-        background-color: #ffffff;
-        padding: 30px 40px;
-        border-radius: 16px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-        width: 650px;
-      }
-
       h2 {
         text-align: center;
         color: #1a237e;
         margin-bottom: 30px;
         font-weight: 700;
       }
-
+      form {
+        background-color: #ffffff;
+        padding: 30px 40px;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        width: 650px;
+      }
       label {
         display: block;
         margin-top: 18px;
-        font-weight: 500;
+        font-weight: 700;
         color: #3f51b5;
         font-size: 15px;
       }
-
+      select,
       input[type="text"],
-      input[type="number"],
       input[type="date"],
-      select {
+      input[type="number"],
+      input[type="file"] {
         width: 100%;
         padding: 12px 14px;
         margin-top: 6px;
@@ -51,7 +48,6 @@
         font-size: 14px;
         transition: all 0.2s ease-in-out;
       }
-
       input[type="text"]:focus,
       input[type="number"]:focus,
       input[type="date"]:focus,
@@ -60,11 +56,6 @@
         box-shadow: 0 0 5px rgba(63, 63, 159, 0.3);
         outline: none;
       }
-
-      #groupsFormedSection {
-        margin-top: 15px;
-      }
-
       button {
         margin-top: 30px;
         width: 100%;
@@ -83,33 +74,20 @@
         background-color: #303f9f;
         transform: translateY(-2px);
       }
-      #childrenCheckboxes,
-      #volunteersCheckboxes,
-      #staffCheckboxes {
-        display: flex;
-        flex-direction: column; /* each checkbox on a new line */
-        margin-top: 6px;
+      button.loading {
+        opacity: 0.7;
+        pointer-events: none;
       }
 
-      #childrenCheckboxes label,
-      #volunteersCheckboxes label,
-      #staffCheckboxes label {
-        display: inline-flex; /* checkbox + text horizontally */
-        align-items: center; /* vertically align checkbox and text */
-        gap: 8px; /* space between checkbox and name */
-        margin-bottom: 4px; /* space between rows */
-        color: #333; /* text color */
-        font-size: 14px;
+      button.loading::after {
+        content: " ⏳";
       }
 
-      /* Checkbox container */
       .checkbox-group {
         display: flex;
         flex-direction: column; /* stack vertically */
         margin-top: 6px;
       }
-
-      /* Each checkbox + label */
       .checkbox-group label {
         display: flex;
         align-items: center;
@@ -119,12 +97,71 @@
         margin-bottom: 4px; /* space between rows */
       }
 
-      .checkbox-group input[type="checkbox"] {
-        margin-right: 8px; /* space between checkbox and name */
+      #otherStaffDiv {
+        margin-top: 10px;
+      }
+      /* Modal Overlay */
+      .modal-overlay {
+        display: none; /* Hidden by default */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(2px);
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
       }
 
-      #otherStaffContainer input {
-        margin-top: 6px;
+      /* Modal Box */
+      .modal-box {
+        background: #fff;
+        padding: 25px 30px;
+        border-radius: 12px;
+        text-align: center;
+        width: 350px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        animation: popIn 0.25s ease-out;
+      }
+
+      .modal-box h2 {
+        margin-bottom: 10px;
+        font-size: 22px;
+        color: #3f51b5;
+      }
+
+      .modal-box p {
+        margin-bottom: 20px;
+        font-size: 16px;
+        color: #444;
+      }
+
+      .modal-box button {
+        background: #3f51b5;
+        color: white;
+        padding: 8px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 15px;
+      }
+
+      .modal-box button:hover {
+        background: #3f51b5;
+      }
+
+      /* Animation */
+      @keyframes popIn {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
       }
 
       @media (max-width: 700px) {
@@ -135,354 +172,442 @@
       }
     </style>
   </head>
-
   <body>
     <form id="activityForm">
       <h2>Activity Form</h2>
-
-      <!-- OBJECTIVE -->
+      <!-- Objective -->
       <label>Objective:</label>
-      <select id="objectiveSelect" name="dsk" required>
+      <select id="objective" onchange="updateActivities()">
         <option value="">Select Objective</option>
-        <option value="1">Objective 1</option>
-        <option value="2">Objective 2</option>
-        <option value="3">Objective 3</option>
+        <option value="Objective 1">Objective 1</option>
+        <option value="Objective 2">Objective 2</option>
+        <option value="Objective 3">Objective 3</option>
       </select>
 
-      <!-- ACTIVITY -->
+      <!-- Activity -->
       <label>Activity:</label>
-      <select id="activitySelect" name="Activity" required>
+      <select id="activity" onchange="updateIndicators()">
         <option value="">Select Activity</option>
       </select>
 
-      <!-- INDICATOR -->
+      <!-- Indicator (single select) -->
       <label>Indicator:</label>
-      <select id="indicatorSelect" name="Indicator" required>
+      <select id="indicator">
         <option value="">Select Indicator</option>
       </select>
 
-      <label>Upload Photo URL:</label>
-      <input type="text" name="UploadPhoto" />
+      <!-- Upload Photo -->
+      <label>Upload Geo-tagged Photo:</label>
+      <input type="file" id="photo" accept="image/*" />
 
+      <!-- Date -->
       <label>Date:</label>
-      <input type="date" name="Date" />
+      <input type="date" id="date" />
 
+      <!-- Location -->
       <label>Location:</label>
-      <select name="Location" id="locationSelect"></select>
+      <select id="location" onchange="updateNames()">
+        <option value="">Select Location</option>
+      </select>
 
+      <!-- Session Number -->
       <label>Session Number:</label>
-      <input type="number" name="SessionNumber" />
+      <input type="number" id="sessionNumber" />
 
-      <div id="groupsFormedSection" class="hidden">
-        <label>Number of groups Formed</label>
-        <input type="number" name="GroupsFormed" />
+      <!-- Number of Groups (conditional) -->
+      <div id="numberOfGroupsDiv" style="display: none">
+        <label>Number of Groups Formed:</label>
+        <input type="number" id="numberOfGroups" />
       </div>
 
-      <label>Age:</label>
-      <input type="number" id="ageFilter" name="Age" />
+      <!-- Age group -->
+      <!-- <label>Age Group:</label>
+      <select id="ageGroup" onchange="updateNames()">
+        <option value="">Select Age Group</option>
+      </select> -->
+      <label>Age of Children:</label>
+      <input type="number" id="ageGroup" onchange="updateNames()" />
 
+      <!-- Gender -->
       <label>Gender:</label>
-      <select id="genderFilter">
-        <option value="">Any</option>
+      <select id="gender" onchange="updateNames()">
+        <option value="">Select Gender</option>
         <option value="Male">Male</option>
         <option value="Female">Female</option>
       </select>
 
+      <!-- Children -->
       <label>Children:</label>
-      <div id="childrenCheckboxes" class="checkbox-group"></div>
+      <div id="children" class="checkbox-group"></div>
 
+      <!-- Volunteers -->
       <label>Volunteers:</label>
-      <div id="volunteersCheckboxes" class="checkbox-group"></div>
+      <div id="volunteers" class="checkbox-group"></div>
 
-      <label>Staff Attendance:</label>
-      <div id="staffCheckboxes" class="checkbox-group">
-        <div>
-          <input
+      <!-- Staff -->
+      <label>Staff:</label>
+      <div class="checkbox-group">
+        <label
+          ><input type="checkbox" value="Jesu" class="staffCheckbox" />
+          Jesu</label
+        >
+        <label
+          ><input type="checkbox" value="Arun" class="staffCheckbox" />
+          Arun</label
+        >
+        <label
+          ><input type="checkbox" value="Ruthvika" class="staffCheckbox" />
+          Ruthvika</label
+        >
+        <label
+          ><input type="checkbox" value="Shrenika" class="staffCheckbox" />
+          Shrenika</label
+        >
+        <label
+          ><input type="checkbox" value="Chandana" class="staffCheckbox" />
+          Chandana</label
+        >
+        <label
+          ><input type="checkbox" value="Archana" class="staffCheckbox" />
+          Archana</label
+        >
+        <label
+          ><input
             type="checkbox"
-            id="staff-Jesu"
-            value="Jesu"
-            name="StaffAttendance"
-          /><label for="staff-Jesu">Jesu</label>
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            id="staff-Arun"
-            value="Arun"
-            name="StaffAttendance"
-          /><label for="staff-Arun">Arun</label>
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            id="staff-Ruthvika"
-            value="Ruthvika"
-            name="StaffAttendance"
-          /><label for="staff-Ruthvika">Ruthvika</label>
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            id="staff-Shrenika"
-            value="Shrenika"
-            name="StaffAttendance"
-          /><label for="staff-Shrenika">Shrenika</label>
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            id="staff-Chandana"
-            value="Chandana"
-            name="StaffAttendance"
-          /><label for="staff-Chandana">Chandana</label>
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            id="staff-Archana"
-            value="Archana"
-            name="StaffAttendance"
-          /><label for="staff-Archana">Archana</label>
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            id="staff-Others"
             value="Others"
-            name="StaffAttendance"
-          /><label for="staff-Others">Others</label>
-        </div>
+            class="staffCheckbox"
+            onclick="toggleOtherStaff()"
+          />
+          Others</label
+        >
       </div>
 
-      <div id="otherStaffContainer" class="hidden">
+      <div id="otherStaffDiv" style="display: none">
         <label>Name of Staff (if Others selected):</label>
-        <input type="text" id="otherStaffName" name="OtherStaffName" />
+        <input type="text" id="otherStaff" />
       </div>
 
-      <button type="submit">Submit</button>
+      <!-- Upload Module -->
+      <label id="uploadModuleLabel">Upload Module:</label>
+      <input type="file" id="uploadModule" accept=".pdf,.doc,.docx,.pptx" />
+
+      <button type="button" onclick="submitForm()">Submit</button>
+      <div id="statusMessage"></div>
     </form>
 
     <script>
-      const api =
-        "https://script.google.com/macros/s/AKfycbyO6kDBRd_WwBZoxE9iFYLzvZSEd3c5F_dgMclWcSKQH45C1E42Glyq4u4C_hYOnU_FSw/exec";
+      const WEB_APP_URL =
+        "https://script.google.com/macros/s/AKfycbzkmdcvDEQivgBHTCGOsnv5sf-n6E5uJKbD4Srdvpi6X4bMummW5jQdTs85gIubdlLe/exec"; // replace with your Apps Script URL
 
-      let childrenList = [];
-      let volunteersList = [];
-      let locationList = [];
+      let objectiveData = {
+        "Objective 1": {
+          "Volunteers Conduct Sessions for Adolescents": [
+            "SEL Sessions for Adolescents",
+            "Gender Sessions for Girls",
+            "Career Guidance Sessions for Adolescents",
+            "Sessions on gender based violence",
+            "Leadership training for Peer Leaders",
+          ],
+          "Trainings / Exposure Visits": [
+            "2-day training sessions",
+            "Weekend training sessions",
+            "Monthly training & review meetings",
+            "Facilitating exposure trips",
+          ],
+          "Events, Materials, Formation of Groups, Setting up of Centres": [
+            "Setting up adolescent centres",
+            "Formation of adolescent groups",
+            "Summer Camp",
+            "Grand Finale",
+            "Sports engagement",
+            "Developing module on Lifeskills & gender",
+          ],
+        },
+        "Objective 2": {
+          "MHHM Activities": [
+            "6 sessions for 4 batches of girls on MHHM",
+            "2 sessions for mothers on MHHM",
+            "2 medical check-ups by gynecologists",
+            "Upgrading module on MHHM & diet",
+            "Procurement of MHHM materials",
+            "Upload health reports/records",
+          ],
+        },
+        "Objective 3": {
+          "Community Strengthening & Gender Sensitisation": [
+            "4 training sessions for slum committees",
+            "5 sessions for boys on gender sensitisation",
+            "Hosting 2 community events",
+          ],
+        },
+      };
 
-      // Load API data
-      fetch(api)
-        .then((res) => res.json())
-        .then((data) => {
-          childrenList = data.children;
-          volunteersList = data.volunteers;
-          locationList = [
-            ...new Set([
-              ...childrenList.map((c) => c.region),
-              ...volunteersList.map((v) => v.location),
-            ]),
-          ];
-          renderLocations();
-          updateCheckboxes();
+      // Load locations & age groups on page load
+      window.onload = async function () {
+        await loadLocations();
+        await updateNames();
+      };
+
+      async function loadLocations() {
+        const res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "getLocations" }),
+        });
+        const locations = await res.json();
+        const locSelect = document.getElementById("location");
+        locations.forEach((l) => {
+          const opt = document.createElement("option");
+          opt.value = l;
+          opt.textContent = l;
+          locSelect.appendChild(opt);
+        });
+      }
+      function showSuccessModal() {
+        document.getElementById("successModal").style.display = "flex";
+      }
+
+      function closeSuccessModal() {
+        document.getElementById("successModal").style.display = "none";
+      }
+
+      // async function loadAgeGroups() {
+      //   const res = await fetch(WEB_APP_URL, {
+      //     method: "POST",
+      //     body: JSON.stringify({ action: "getAgeGroups" }),
+      //   });
+      //   let groups = await res.json();
+      //   if (!Array.isArray(groups)) groups = [];
+      //   const ageSelect = document.getElementById("ageGroup");
+      //   ageSelect.innerHTML = "<option value=''>Select Age Group</option>";
+      //   groups.forEach((g) => {
+      //     const opt = document.createElement("option");
+      //     opt.value = g;
+      //     opt.textContent = g;
+      //     ageSelect.appendChild(opt);
+      //   });
+      // }
+
+      async function updateNames() {
+        const location = document.getElementById("location").value;
+        const ageGroup = document.getElementById("ageGroup").value;
+        const gender = document.getElementById("gender").value;
+
+        // Children
+        const resChildren = await fetch(WEB_APP_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "getChildren",
+            location,
+            ageGroup,
+            gender,
+          }),
+        });
+        const children = await resChildren.json();
+        const childDiv = document.getElementById("children");
+        childDiv.innerHTML = "";
+        children.forEach((c) => {
+          const label = document.createElement("label");
+          label.innerHTML = `<input type="checkbox" value="${c}"> ${c}`;
+          childDiv.appendChild(label);
         });
 
-      function renderLocations() {
-        const locSelect = document.getElementById("locationSelect");
-        locSelect.innerHTML = locationList
-          .map((loc) => `<option value="${loc}">${loc}</option>`)
-          .join("");
-      }
-
-      function matchAgeGroup(ageGroup, age) {
-        if (!age || !ageGroup) return true;
-        const [min, max] = ageGroup.split("-").map(Number);
-        return age >= min && age <= max;
-      }
-
-      function renderChildrenCheckboxes(list) {
-        const container = document.getElementById("childrenCheckboxes");
-        container.innerHTML = "";
-        list.forEach((c) => {
-          const id = "child-" + c.name.replace(/\s/g, "_");
-          container.innerHTML += `<div><input type="checkbox" id="${id}" value="${c.name}" name="Children"><label for="${id}">${c.name}</label></div>`;
+        // Volunteers
+        const resVols = await fetch(WEB_APP_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "getVolunteers", location }),
+        });
+        const vols = await resVols.json();
+        const volDiv = document.getElementById("volunteers");
+        volDiv.innerHTML = "";
+        vols.forEach((v) => {
+          const label = document.createElement("label");
+          label.innerHTML = `<input type="checkbox" value="${v}"> ${v}`;
+          volDiv.appendChild(label);
         });
       }
 
-      function renderVolunteersCheckboxes(list) {
-        const container = document.getElementById("volunteersCheckboxes");
-        container.innerHTML = "";
-        list.forEach((v) => {
-          const id = "vol-" + v.name.replace(/\s/g, "_");
-          container.innerHTML += `<div><input type="checkbox" id="${id}" value="${v.name}" name="Volunteers"><label for="${id}">${v.name}</label></div>`;
+      // Objective → Activity
+      function updateActivities() {
+        const obj = document.getElementById("objective").value;
+        const actSelect = document.getElementById("activity");
+        actSelect.innerHTML = "<option value=''>Select Activity</option>";
+        if (obj && objectiveData[obj]) {
+          Object.keys(objectiveData[obj]).forEach((act) => {
+            const opt = document.createElement("option");
+            opt.value = act;
+            opt.textContent = act;
+            actSelect.appendChild(opt);
+          });
+        }
+        updateIndicators();
+        updateConditionalFields();
+      }
+
+      function updateIndicators() {
+        const obj = document.getElementById("objective").value;
+        const act = document.getElementById("activity").value;
+        const indSelect = document.getElementById("indicator");
+        indSelect.innerHTML = "<option value=''>Select Indicator</option>";
+        if (obj && act && objectiveData[obj][act]) {
+          objectiveData[obj][act].forEach((ind) => {
+            const opt = document.createElement("option");
+            opt.value = ind;
+            opt.textContent = ind;
+            indSelect.appendChild(opt);
+          });
+        }
+      }
+
+      function updateConditionalFields() {
+        const obj = document.getElementById("objective").value;
+        const act = document.getElementById("activity").value;
+        const showGroups =
+          obj === "Objective 1" &&
+          act ===
+            "Events, Materials, Formation of Groups, Setting up of Centres";
+        document.getElementById("numberOfGroupsDiv").style.display = showGroups
+          ? "block"
+          : "none";
+
+        const label = document.getElementById("uploadModuleLabel");
+        if (showGroups || obj === "Objective 2")
+          label.textContent = "Upload Module:";
+        else if (obj === "Objective 3")
+          label.textContent = "Upload Minutes of the Meeting:";
+        else label.textContent = "Upload Module:";
+      }
+
+      function toggleOtherStaff() {
+        const checked = Array.from(
+          document.querySelectorAll(".staffCheckbox")
+        ).some((cb) => cb.value === "Others" && cb.checked);
+        document.getElementById("otherStaffDiv").style.display = checked
+          ? "block"
+          : "none";
+      }
+
+      async function uploadFile(file) {
+        if (!file) return null;
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = async function (e) {
+            const base64 = e.target.result.split(",")[1];
+            const res = await fetch(WEB_APP_URL, {
+              method: "POST",
+              body: JSON.stringify({
+                action: "uploadFile",
+                file: {
+                  fileBytes: base64,
+                  fileName: file.name,
+                  mimeType: file.type,
+                },
+              }),
+            });
+            resolve(await res.json());
+          };
+          reader.readAsDataURL(file);
         });
       }
 
-      function updateCheckboxes() {
-        const selectedLocation =
-          document.getElementById("locationSelect").value || "";
-        const age = document.getElementById("ageFilter").value;
-        const gender = document.getElementById("genderFilter").value;
+      async function submitForm() {
+        const submitBtn = document.querySelector("button");
+        const statusBox = document.getElementById("statusMessage");
 
-        renderChildrenCheckboxes(
-          childrenList.filter(
-            (c) =>
-              (!selectedLocation || c.region === selectedLocation) &&
-              (!age || c.age == age) &&
-              (!gender || c.gender === gender)
-          )
-        );
+        // Reset message box
+        statusBox.style.display = "none";
+        statusBox.className = "";
+        statusBox.textContent = "";
 
-        renderVolunteersCheckboxes(
-          volunteersList.filter(
-            (v) =>
-              (!selectedLocation || v.location === selectedLocation) &&
-              matchAgeGroup(v.ageGroup, age)
-          )
-        );
-      }
+        // Disable button + loader state
+        submitBtn.classList.add("loading");
+        submitBtn.disabled = true;
 
-      document.getElementById("locationSelect").onchange = updateCheckboxes;
-      document.getElementById("ageFilter").oninput = updateCheckboxes;
-      document.getElementById("genderFilter").onchange = updateCheckboxes;
+        try {
+          // Read files
+          const photoFile = document.getElementById("photo").files[0];
+          const moduleFile = document.getElementById("uploadModule").files[0];
 
-      // Staff Others
-      document
-        .getElementById("staff-Others")
-        .addEventListener("change", function () {
-          document.getElementById("otherStaffContainer").style.display = this
-            .checked
-            ? "block"
-            : "none";
-          if (!this.checked)
-            document.getElementById("otherStaffName").value = "";
-        });
+          const [photoRes, moduleRes] = await Promise.all([
+            uploadFile(photoFile),
+            uploadFile(moduleFile),
+          ]);
 
-      // Submit form
-      document
-        .getElementById("activityForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const form = new FormData(e.target);
+          // Staff selected
+          const staffSelected = Array.from(
+            document.querySelectorAll(".staffCheckbox:checked")
+          ).map((cb) => cb.value);
+
+          const otherStaffName = document.getElementById("otherStaff").value;
+          if (staffSelected.includes("Others") && otherStaffName)
+            staffSelected[staffSelected.indexOf("Others")] = otherStaffName;
 
           // Children
           const childrenSelected = Array.from(
-            document.querySelectorAll(
-              '#childrenCheckboxes input[name="Children"]:checked'
-            )
+            document.querySelectorAll("#children input:checked")
           ).map((cb) => cb.value);
 
           // Volunteers
           const volunteersSelected = Array.from(
-            document.querySelectorAll(
-              '#volunteersCheckboxes input[name="Volunteers"]:checked'
-            )
+            document.querySelectorAll("#volunteers input:checked")
           ).map((cb) => cb.value);
 
-          // Staff
-          const staffSelected = Array.from(
-            document.querySelectorAll(
-              '#staffCheckboxes input[name="StaffAttendance"]:checked'
-            )
-          ).map((cb) => cb.value);
+          // Final data payload
+          const data = {
+            objective: document.getElementById("objective").value,
+            activity: document.getElementById("activity").value,
+            indicator: document.getElementById("indicator").value,
+            uploadedPhotoUrl: photoRes?.url,
+            date: document.getElementById("date").value,
+            location: document.getElementById("location").value,
+            sessionNumber: document.getElementById("sessionNumber").value,
+            numberOfGroups: document.getElementById("numberOfGroups").value,
+            age: document.getElementById("ageGroup").value,
+            children: childrenSelected,
+            volunteers: volunteersSelected,
+            staff: staffSelected,
+            uploadModuleUrl: moduleRes?.url,
+          };
 
-          // Add Others if checked
-          if (document.getElementById("staff-Others").checked) {
-            const otherStaffName = document
-              .getElementById("otherStaffName")
-              .value.trim();
-            if (otherStaffName) staffSelected.push(otherStaffName);
-          }
-
-          // Set form data
-          form.set("Children", childrenSelected.join(", "));
-          form.set("Volunteers", volunteersSelected.join(", "));
-          form.set("StaffAttendance", staffSelected.join(", "));
-
-          // Optional: debug what is being sent
-          const formData = Object.fromEntries(form);
-          console.log("Submitting FormData:", formData);
-
-          await fetch(api, {
+          // Save Form
+          const res = await fetch(WEB_APP_URL, {
             method: "POST",
-            body: JSON.stringify(formData),
+            body: JSON.stringify({ action: "saveForm", data }),
           });
 
-          alert("Form submitted successfully!");
-        });
+          const result = await res.json();
 
-      // Objective → Activity → Indicator logic (keep your old code)
-      const objectiveData = {
-        1: {
-          "Volunteers Conduct Sessions for Adolescents": [
-            { indicator: "1.7 SEL Sessions for Adolescents" },
-            { indicator: "1.6 Gender Sessions for Girls" },
-            { indicator: "1.10 Career Guidance Sessions for Adolescents" },
-            { indicator: "1.8 Sessions on gender based violence" },
-            { indicator: "1.11 Leadership training for Peer Leaders" },
-          ],
-          "Trainings / Exposure Visits": [
-            { indicator: "1.1 2-day training sessions" },
-            { indicator: "1.2 Weekend training sessions" },
-            { indicator: "1.3 Monthly training & review meetings" },
-            { indicator: "1.13 Facilitating exposure trips" },
-          ],
-          "Events / Materials / Groups / Centres": [
-            { indicator: "1.4 Setting up adolescent centres" },
-            { indicator: "1.5 Formation of adolescent groups" },
-            { indicator: "1.14 Summer Camp" },
-            { indicator: "1.15 Grand Finale - Summer Camp" },
-            { indicator: "1.9 Sports engagement materials" },
-            { indicator: "1.12 Developing module on Lifeskills & gender" },
-          ],
-        },
-        2: {
-          "MHHM Activities": [
-            { indicator: "6 sessions for 4 batches of girls on MHHM" },
-            { indicator: "2 sessions for mothers on MHHM" },
-            { indicator: "2 medical check-ups by gynecologists" },
-            { indicator: "Upgrading module on MHHM & diet" },
-            { indicator: "Procurement of MHHM materials" },
-            { indicator: "Upload health reports/records" },
-          ],
-        },
-        3: {
-          "Community Strengthening & Gender Sensitisation": [
-            { indicator: "4 training sessions for slum committees" },
-            { indicator: "5 sessions for boys on gender sensitisation" },
-            { indicator: "Hosting 2 community events" },
-          ],
-        },
-      };
+          if (result.status === "success") {
+            // Show success message
+            showSuccessModal();
 
-      document.getElementById("objectiveSelect").onchange = function () {
-        const obj = this.value;
-        const activitySelect = document.getElementById("activitySelect");
-        activitySelect.innerHTML =
-          `<option value="">Select Activity</option>` +
-          Object.keys(objectiveData[obj] || {})
-            .map((act) => `<option>${act}</option>`)
-            .join("");
-        document.getElementById(
-          "indicatorSelect"
-        ).innerHTML = `<option value="">Select Indicator</option>`;
-      };
+            // Reset form visually
+            document.getElementById("activityForm").reset();
+            document.getElementById("children").innerHTML = "";
+            document.getElementById("volunteers").innerHTML = "";
+            document.getElementById("otherStaffDiv").style.display = "none";
+            document.getElementById("numberOfGroupsDiv").style.display = "none";
+            updateConditionalFields();
+          } else {
+            throw new Error(result.message || "Unknown error");
+          }
+        } catch (err) {
+          statusBox.textContent = "⚠️ Error submitting form: " + err.message;
+          statusBox.className = "error";
+          statusBox.style.display = "block";
+        }
 
-      document.getElementById("activitySelect").onchange = function () {
-        const obj = document.getElementById("objectiveSelect").value;
-        const activity = this.value;
-        const indicatorSelect = document.getElementById("indicatorSelect");
-        indicatorSelect.innerHTML =
-          `<option value="">Select Indicator</option>` +
-          (objectiveData[obj][activity] || [])
-            .map((i) => `<option>${i.indicator}</option>`)
-            .join("");
-
-        const groupsSection = document.getElementById("groupsFormedSection");
-        groupsSection.style.display =
-          obj === "1" && activity === "Events / Materials / Groups / Centres"
-            ? "block"
-            : "none";
-      };
+        // Re-enable button
+        submitBtn.classList.remove("loading");
+        submitBtn.disabled = false;
+      }
     </script>
+    <!-- Success Modal -->
+    <div id="successModal" class="modal-overlay">
+      <div class="modal-box">
+        <h2>✔ Activity Submitted</h2>
+        <p>Your activity has been successfully submitted.</p>
+        <button onclick="closeSuccessModal()">OK</button>
+      </div>
+    </div>
   </body>
 </html>
