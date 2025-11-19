@@ -2,6 +2,8 @@
 <html>
   <head>
     <title>Youngistaan Activity Form</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
       rel="stylesheet"
@@ -9,11 +11,13 @@
     <style>
       body {
         font-family: "Roboto", sans-serif;
+
         padding: 40px 20px;
         display: flex;
         justify-content: center;
         background: url("assets/bg.jpg") no-repeat center center fixed;
         background-size: cover;
+        overflow-x: hidden;
       }
       h2 {
         text-align: center;
@@ -195,26 +199,50 @@
         }
       }
 
+      /* ------------------ RESPONSIVE MOBILE ------------------ */
       @media (max-width: 600px) {
-        label {
-          font-size: 20px !important;
-        }
-
-        input,
-        select,
-        textarea {
-          font-size: 18px !important;
-        }
-
         body {
-          background: none !important;
-          padding: 10px !important;
+          padding: 10px;
+          overflow-x: hidden;
         }
 
-        .form-container {
+        .header-logos,
+        form {
           width: 100% !important;
           max-width: 100% !important;
-          padding: 20px;
+          padding: 10px !important;
+          box-sizing: border-box;
+        }
+
+        h2 {
+          font-size: 22px !important;
+        }
+
+        label {
+          font-size: 16px !important;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="file"],
+        select,
+        textarea,
+        button {
+          font-size: 16px !important;
+          padding: 10px 12px !important;
+        }
+
+        .checkbox-group label {
+          font-size: 15px !important;
+        }
+
+        .left-logo {
+          height: 60px;
+        }
+        .right-logo {
+          margin-right: 5px;
+          height: 40px;
         }
       }
     </style>
