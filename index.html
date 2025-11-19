@@ -34,7 +34,7 @@
         margin-top: 18px;
         font-weight: 700;
         color: #51489c;
-        font-size: 15px;
+        font-size: px;
       }
       /* label.required::after {
         content: " *";
@@ -196,149 +196,193 @@
         }
       }
 
-      @media (max-width: 700px) {
-        #activityForm {
-          width: 100%;
-          padding: 20px;
+      @media (max-width: 600px) {
+        label {
+          font-size: 18px !important;
+        }
+
+        input,
+        select,
+        textarea {
+          font-size: 16px !important;
+        }
+
+        body {
+          padding: 10px !important;
+        }
+
+        .form-container {
+          width: 100% !important;
+          max-width: 100% !important;
         }
       }
     </style>
   </head>
   <body>
-    <form id="activityForm">
-      <div class="header-logos">
-        <img src="assets/youngistaan.png" class="logo left-logo" />
-        <img src="assets/main-logo.png" class="logo right-logo" />
-      </div>
-      <h2>Youngistaan Pathashaala Education Program Form</h2>
-      <!-- Objective -->
-      <label class="required">Objective:</label>
-      <select id="objective" onchange="updateActivities()" required>
-        <option value="">Select Objective</option>
+    <div class="form-container">
+      <form id="activityForm">
+        <div class="header-logos">
+          <img src="assets/youngistaan.png" class="logo left-logo" />
+          <img src="assets/main-logo.png" class="logo right-logo" />
+        </div>
+        <h2>Youngistaan Pathashaala Education Program Form</h2>
+        <!-- Objective -->
+        <label class="required">Objective:</label>
+        <select id="objective" onchange="updateActivities()" required>
+          <option value="">Select Objective</option>
+          <option value="Objective 1">Objective 1</option>
+          <option value="Objective 2">Objective 2</option>
+          <option value="Objective 3">Objective 3</option>
+        </select>
+
+        <!-- Activity -->
+        <label class="required">Activity:</label>
+        <select id="activity" onchange="updateIndicators()" required>
+          <option value="">Select Activity</option>
+        </select>
+
+        <!-- Indicator (single select) -->
+        <label class="required">Indicator:</label>
+        <select id="indicator" required>
+          <option value="">Select Indicator</option>
+        </select>
+
+        <!-- Upload Photo -->
+        <label>Upload Geo-tagged Photo:</label>
+        <input type="file" id="photo" accept="image/*" />
+
+        <!-- Date -->
+        <label class="required">Date:</label>
+        <input type="date" id="date" required />
+
+        <!-- Location -->
+        <div id="locationWrapper">
+          <label>Location:</label>
+          <select id="location" onchange="updateNames()">
+            <option value="">Select Location</option>
+          </select>
+        </div>
+        <!-- <label>Location:</label>
+      <select id="locationob1act2" style="display: none">
+        <option value="">Select Location</option>
         <option value="Objective 1">Objective 1</option>
         <option value="Objective 2">Objective 2</option>
         <option value="Objective 3">Objective 3</option>
-      </select>
+      </select> -->
+        <!-- NEW CUSTOM LOCATION FOR Obj1-Act2 -->
+        <div id="customLocationWrapper" style="display: none">
+          <label for="customLocation">Location</label>
+          <select id="customLocation" name="customLocation">
+            <option value="">Select</option>
+            <option value="Office">Office</option>
+            <option value="Project Location">Project Location</option>
+            <option value="Other">Other</option>
+          </select>
 
-      <!-- Activity -->
-      <label class="required">Activity:</label>
-      <select id="activity" onchange="updateIndicators()" required>
-        <option value="">Select Activity</option>
-      </select>
+          <div
+            id="otherLocationWrapper"
+            style="display: none; margin-top: 12px"
+          >
+            <label for="otherLocation">Name Location:</label>
+            <input type="text" id="otherLocation" name="otherLocation" />
+          </div>
+        </div>
 
-      <!-- Indicator (single select) -->
-      <label class="required">Indicator:</label>
-      <select id="indicator" required>
-        <option value="">Select Indicator</option>
-      </select>
+        <!-- Session Number -->
+        <label class="required" id="sessionLabel">Session Number:</label>
+        <input type="number" id="sessionNumber" required />
 
-      <!-- Upload Photo -->
-      <label>Upload Geo-tagged Photo:</label>
-      <input type="file" id="photo" accept="image/*" />
+        <!-- Number of Groups (conditional) -->
+        <div id="numberOfGroupsDiv" style="display: none">
+          <label class="required">Number of Groups Formed:</label>
+          <input type="number" id="numberOfGroups" required />
+        </div>
 
-      <!-- Date -->
-      <label class="required">Date:</label>
-      <input type="date" id="date" required />
-
-      <!-- Location -->
-      <label>Location:</label>
-      <select id="location" onchange="updateNames()">
-        <option value="">Select Location</option>
-      </select>
-
-      <!-- Session Number -->
-      <label class="required">Session Number:</label>
-      <input type="number" id="sessionNumber" required />
-
-      <!-- Number of Groups (conditional) -->
-      <div id="numberOfGroupsDiv" style="display: none">
-        <label class="required">Number of Groups Formed:</label>
-        <input type="number" id="numberOfGroups" required />
-      </div>
-
-      <!-- Age group -->
-      <!-- <label>Age Group:</label>
+        <!-- Age group -->
+        <!-- <label>Age Group:</label>
       <select id="ageGroup" onchange="updateNames()">
         <option value="">Select Age Group</option>
       </select> -->
-      <!-- <label>Age of Children:</label>
+        <!-- <label>Age of Children:</label>
       <input type="number" id="ageGroup" onchange="updateNames()" /> -->
-      <label>Age Group:</label>
-      <select id="ageGroup" name="ageGroup" onchange="updateNames()">
-        <option value="">Select Age Group</option>
-        <option value="3 - 5">3 - 5</option>
-        <option value="6 - 8">6 - 8</option>
-        <option value="9 - 12">9 - 12</option>
-        <option value="13+">13+</option>
-      </select>
-      <br /><br />
+        <label>Age Group:</label>
+        <select id="ageGroup" name="ageGroup" onchange="updateNames()">
+          <option value="">Select Age Group</option>
+          <option value="3 - 5">3 - 5</option>
+          <option value="6 - 8">6 - 8</option>
+          <option value="9 - 12">9 - 12</option>
+          <option value="13+">13+</option>
+        </select>
+        <br /><br />
 
-      <!-- Gender -->
-      <label>Gender:</label>
-      <select id="gender" onchange="updateNames()">
-        <option value="">Select Gender</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-      </select>
+        <!-- Gender -->
+        <label>Gender:</label>
+        <select id="gender" onchange="updateNames()">
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
 
-      <!-- Children -->
-      <label>Children:</label>
-      <div id="children" class="checkbox-group" required></div>
+        <!-- Children -->
+        <label>Children:</label>
+        <div id="children" class="checkbox-group" required></div>
 
-      <!-- Volunteers -->
-      <label>Volunteers:</label>
-      <div id="volunteers" class="checkbox-group" required></div>
+        <!-- Volunteers -->
+        <label>Volunteers:</label>
+        <div id="volunteers" class="checkbox-group" required></div>
 
-      <!-- Staff -->
-      <label>Staff:</label>
-      <div class="checkbox-group">
-        <label
-          ><input type="checkbox" value="Jesu" class="staffCheckbox" />
-          Jesu</label
-        >
-        <label
-          ><input type="checkbox" value="Arun" class="staffCheckbox" />
-          Arun</label
-        >
-        <label
-          ><input type="checkbox" value="Ruthvika" class="staffCheckbox" />
-          Ruthvika</label
-        >
-        <label
-          ><input type="checkbox" value="Shrenika" class="staffCheckbox" />
-          Shrenika</label
-        >
-        <label
-          ><input type="checkbox" value="Chandana" class="staffCheckbox" />
-          Chandana</label
-        >
-        <label
-          ><input type="checkbox" value="Archana" class="staffCheckbox" />
-          Archana</label
-        >
-        <label
-          ><input
-            type="checkbox"
-            value="Others"
-            class="staffCheckbox"
-            onclick="toggleOtherStaff()"
-          />
-          Others</label
-        >
-      </div>
+        <!-- Staff -->
+        <label>Staff:</label>
+        <div class="checkbox-group">
+          <label
+            ><input type="checkbox" value="Jesu" class="staffCheckbox" />
+            Jesu</label
+          >
+          <label
+            ><input type="checkbox" value="Arun" class="staffCheckbox" />
+            Arun</label
+          >
+          <label
+            ><input type="checkbox" value="Ruthvika" class="staffCheckbox" />
+            Ruthvika</label
+          >
+          <label
+            ><input type="checkbox" value="Shrenika" class="staffCheckbox" />
+            Shrenika</label
+          >
+          <label
+            ><input type="checkbox" value="Chandana" class="staffCheckbox" />
+            Chandana</label
+          >
+          <label
+            ><input type="checkbox" value="Archana" class="staffCheckbox" />
+            Archana</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              value="Others"
+              class="staffCheckbox"
+              onclick="toggleOtherStaff()"
+            />
+            Others</label
+          >
+        </div>
 
-      <div id="otherStaffDiv" style="display: none">
-        <label>Name of Staff (if Others selected):</label>
-        <input type="text" id="otherStaff" />
-      </div>
+        <div id="otherStaffDiv" style="display: none">
+          <label>Name of Staff (if Others selected):</label>
+          <input type="text" id="otherStaff" />
+        </div>
 
-      <!-- Upload Module -->
-      <label id="uploadModuleLabel">Upload Module:</label>
-      <input type="file" id="uploadModule" accept=".pdf,.doc,.docx,.pptx" />
-
-      <button type="button" onclick="submitForm()">Submit</button>
-      <div id="statusMessage"></div>
-    </form>
+        <!-- Upload Module -->
+        <div id="moduleUploadWrapper">
+          <label id="uploadModuleLabel">Upload Module:</label>
+          <input type="file" id="uploadModule" accept=".pdf,.doc,.docx,.pptx" />
+        </div>
+        <button type="button" onclick="submitForm()">Submit</button>
+        <div id="statusMessage"></div>
+      </form>
+    </div>
     <!-- Success Modal -->
     <div id="successModal" class="modal-overlay">
       <div class="modal-box">
@@ -349,7 +393,7 @@
     </div>
     <script>
       const WEB_APP_URL =
-        "https://script.google.com/macros/s/AKfycbzkmdcvDEQivgBHTCGOsnv5sf-n6E5uJKbD4Srdvpi6X4bMummW5jQdTs85gIubdlLe/exec"; // replace with your Apps Script URL
+        "https://script.google.com/macros/s/AKfycbwM4x8ToVdcH4cw_CppBBP44jbuHA2Pb6KVRHS7BEaESrlbf3a7_sOh9BSNpUSOcNMG/exec"; // replace with your Apps Script URL
 
       let objectiveData = {
         "Objective 1": {
@@ -400,7 +444,65 @@
         // await loadAgeGroups();
         await updateNames();
       };
+      document.addEventListener("DOMContentLoaded", () => {
+        const objective = document.getElementById("objective");
+        const activity = document.getElementById("activity");
 
+        const locationWrapper = document.getElementById("locationWrapper");
+        const customLocationWrapper = document.getElementById(
+          "customLocationWrapper"
+        );
+        const customLocation = document.getElementById("customLocation");
+        const otherLocationWrapper = document.getElementById(
+          "otherLocationWrapper"
+        );
+
+        const sessionLabel = document.getElementById("sessionLabel");
+        const moduleUploadWrapper = document.getElementById(
+          "moduleUploadWrapper"
+        );
+
+        function updateForm() {
+          const obj = objective.value;
+          const act = activity.value;
+
+          // --- Location Change for Obj1 Act2 ---
+          if (obj === "Objective 1" && act === "Trainings / Exposure Visits") {
+            locationWrapper.style.display = "none";
+            customLocationWrapper.style.display = "block";
+          } else {
+            locationWrapper.style.display = "block";
+            customLocationWrapper.style.display = "none";
+          }
+
+          // Show/hide "Other" location input
+          customLocation.addEventListener("change", () => {
+            if (customLocation.value === "Other") {
+              otherLocationWrapper.style.display = "block";
+            } else {
+              otherLocationWrapper.style.display = "none";
+            }
+          });
+
+          // --- Change session label & hide module upload for Act 2 and 3 ---
+          if (
+            obj === "Objective 1" &&
+            (act === "Trainings / Exposure Visits" ||
+              act ===
+                "Events, Materials, Formation of Groups, Setting up of Centres")
+          ) {
+            sessionLabel.innerText =
+              "Session/Meeting Number or Number of Exposure Visits";
+            moduleUploadWrapper.style.display = "none";
+          } else {
+            sessionLabel.innerText = "Session Number";
+            moduleUploadWrapper.style.display = "block";
+          }
+        }
+
+        objective.addEventListener("change", updateForm);
+        activity.addEventListener("change", updateForm);
+      });
       async function loadLocations() {
         const res = await fetch(WEB_APP_URL, {
           method: "POST",
@@ -590,11 +692,12 @@
           // Staff selected
           const staffSelected = Array.from(
             document.querySelectorAll(".staffCheckbox:checked")
-          ).map((cb) => cb.value);
+          ).map((cb) => cb.value.trim());
 
           const otherStaffName = document.getElementById("otherStaff").value;
           if (staffSelected.includes("Others") && otherStaffName)
-            staffSelected[staffSelected.indexOf("Others")] = otherStaffName;
+            staffSelected[staffSelected.indexOf("Others")] =
+              otherStaffName.trim();
 
           // Children
           const childrenSelected = Array.from(
@@ -605,7 +708,18 @@
           const volunteersSelected = Array.from(
             document.querySelectorAll("#volunteers input:checked")
           ).map((cb) => cb.value);
+          let finalLocation = document.getElementById("location").value;
+          const obj = document.getElementById("objective").value;
+          const act = document.getElementById("activity").value;
 
+          if (obj === "Objective 1" && act === "Trainings / Exposure Visits") {
+            const customLoc = document.getElementById("customLocation").value;
+            finalLocation = customLoc;
+
+            if (customLoc === "Other") {
+              finalLocation = document.getElementById("otherLocation").value;
+            }
+          }
           // Final data payload
           const data = {
             objective: document.getElementById("objective").value,
@@ -613,7 +727,8 @@
             indicator: document.getElementById("indicator").value,
             uploadedPhotoUrl: photoRes?.url,
             date: document.getElementById("date").value,
-            location: document.getElementById("location").value,
+            location: finalLocation,
+
             sessionNumber: document.getElementById("sessionNumber").value,
             numberOfGroups: document.getElementById("numberOfGroups").value,
             age: document.getElementById("ageGroup").value,
