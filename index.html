@@ -9,19 +9,21 @@
     <style>
       body {
         font-family: "Roboto", sans-serif;
-        background: linear-gradient(135deg, #eceff1, #f5f7fa);
+
         padding: 40px 20px;
         display: flex;
         justify-content: center;
+        background: url("assets/bg.jpg") no-repeat center center fixed;
+        background-size: cover;
       }
       h2 {
         text-align: center;
-        color: #1a237e;
+        color: #6a3f7f;
         margin-bottom: 30px;
         font-weight: 700;
       }
       form {
-        background-color: #ffffff;
+        background-color: #fcf7fa;
         padding: 30px 40px;
         border-radius: 16px;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
@@ -31,9 +33,15 @@
         display: block;
         margin-top: 18px;
         font-weight: 700;
-        color: #3f51b5;
+        color: #51489c;
         font-size: 15px;
       }
+      /* label.required::after {
+        content: " *";
+        color: red;
+        font-weight: bold;
+      } */
+
       select,
       input[type="text"],
       input[type="date"],
@@ -151,6 +159,30 @@
       .modal-box button:hover {
         background: #3f51b5;
       }
+      .header-logos {
+        width: 650px; /* same width as form */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .logo {
+        height: 60px; /* adjust as needed */
+        object-fit: contain;
+      }
+
+      .left-logo {
+        margin-left: 5px;
+        height: 95px; /* BIGGER */
+        width: auto;
+      }
+
+      .right-logo {
+        margin-right: 5px;
+        height: 45px; /* SMALLER */
+        width: auto;
+      }
 
       /* Animation */
       @keyframes popIn {
@@ -174,10 +206,14 @@
   </head>
   <body>
     <form id="activityForm">
-      <h2>Activity Form</h2>
+      <div class="header-logos">
+        <img src="assets/youngistaan.png" class="logo left-logo" />
+        <img src="assets/main-logo.png" class="logo right-logo" />
+      </div>
+      <h2>Youngistaan Pathashaala Education Program Form</h2>
       <!-- Objective -->
-      <label>Objective:</label>
-      <select id="objective" onchange="updateActivities()">
+      <label class="required">Objective:</label>
+      <select id="objective" onchange="updateActivities()" required>
         <option value="">Select Objective</option>
         <option value="Objective 1">Objective 1</option>
         <option value="Objective 2">Objective 2</option>
@@ -185,14 +221,14 @@
       </select>
 
       <!-- Activity -->
-      <label>Activity:</label>
-      <select id="activity" onchange="updateIndicators()">
+      <label class="required">Activity:</label>
+      <select id="activity" onchange="updateIndicators()" required>
         <option value="">Select Activity</option>
       </select>
 
       <!-- Indicator (single select) -->
-      <label>Indicator:</label>
-      <select id="indicator">
+      <label class="required">Indicator:</label>
+      <select id="indicator" required>
         <option value="">Select Indicator</option>
       </select>
 
@@ -201,8 +237,8 @@
       <input type="file" id="photo" accept="image/*" />
 
       <!-- Date -->
-      <label>Date:</label>
-      <input type="date" id="date" />
+      <label class="required">Date:</label>
+      <input type="date" id="date" required />
 
       <!-- Location -->
       <label>Location:</label>
@@ -211,13 +247,13 @@
       </select>
 
       <!-- Session Number -->
-      <label>Session Number:</label>
-      <input type="number" id="sessionNumber" />
+      <label class="required">Session Number:</label>
+      <input type="number" id="sessionNumber" required />
 
       <!-- Number of Groups (conditional) -->
       <div id="numberOfGroupsDiv" style="display: none">
-        <label>Number of Groups Formed:</label>
-        <input type="number" id="numberOfGroups" />
+        <label class="required">Number of Groups Formed:</label>
+        <input type="number" id="numberOfGroups" required />
       </div>
 
       <!-- Age group -->
@@ -225,8 +261,17 @@
       <select id="ageGroup" onchange="updateNames()">
         <option value="">Select Age Group</option>
       </select> -->
-      <label>Age of Children:</label>
-      <input type="number" id="ageGroup" onchange="updateNames()" />
+      <!-- <label>Age of Children:</label>
+      <input type="number" id="ageGroup" onchange="updateNames()" /> -->
+      <label>Age Group:</label>
+      <select id="ageGroup" name="ageGroup" onchange="updateNames()">
+        <option value="">Select Age Group</option>
+        <option value="3 - 5">3 - 5</option>
+        <option value="6 - 8">6 - 8</option>
+        <option value="9 - 12">9 - 12</option>
+        <option value="13+">13+</option>
+      </select>
+      <br /><br />
 
       <!-- Gender -->
       <label>Gender:</label>
@@ -238,11 +283,11 @@
 
       <!-- Children -->
       <label>Children:</label>
-      <div id="children" class="checkbox-group"></div>
+      <div id="children" class="checkbox-group" required></div>
 
       <!-- Volunteers -->
       <label>Volunteers:</label>
-      <div id="volunteers" class="checkbox-group"></div>
+      <div id="volunteers" class="checkbox-group" required></div>
 
       <!-- Staff -->
       <label>Staff:</label>
@@ -294,7 +339,14 @@
       <button type="button" onclick="submitForm()">Submit</button>
       <div id="statusMessage"></div>
     </form>
-
+    <!-- Success Modal -->
+    <div id="successModal" class="modal-overlay">
+      <div class="modal-box">
+        <h2>✔ Data Submitted</h2>
+        <p>Your data has been successfully submitted.</p>
+        <button onclick="closeSuccessModal()">OK</button>
+      </div>
+    </div>
     <script>
       const WEB_APP_URL =
         "https://script.google.com/macros/s/AKfycbzkmdcvDEQivgBHTCGOsnv5sf-n6E5uJKbD4Srdvpi6X4bMummW5jQdTs85gIubdlLe/exec"; // replace with your Apps Script URL
@@ -345,6 +397,7 @@
       // Load locations & age groups on page load
       window.onload = async function () {
         await loadLocations();
+        // await loadAgeGroups();
         await updateNames();
       };
 
@@ -397,9 +450,9 @@
           method: "POST",
           body: JSON.stringify({
             action: "getChildren",
-            location,
-            ageGroup,
-            gender,
+            location: location,
+            gender: gender,
+            ageGroup: ageGroup,
           }),
         });
         const children = await resChildren.json();
@@ -456,6 +509,7 @@
             indSelect.appendChild(opt);
           });
         }
+        updateConditionalFields();
       }
 
       function updateConditionalFields() {
@@ -465,6 +519,7 @@
           obj === "Objective 1" &&
           act ===
             "Events, Materials, Formation of Groups, Setting up of Centres";
+
         document.getElementById("numberOfGroupsDiv").style.display = showGroups
           ? "block"
           : "none";
@@ -601,13 +656,5 @@
         submitBtn.disabled = false;
       }
     </script>
-    <!-- Success Modal -->
-    <div id="successModal" class="modal-overlay">
-      <div class="modal-box">
-        <h2>✔ Activity Submitted</h2>
-        <p>Your activity has been successfully submitted.</p>
-        <button onclick="closeSuccessModal()">OK</button>
-      </div>
-    </div>
   </body>
 </html>
