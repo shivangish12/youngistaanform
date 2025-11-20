@@ -210,7 +210,7 @@
         form {
           width: 100% !important;
           max-width: 100% !important;
-          padding: 10px !important;
+
           box-sizing: border-box;
         }
 
@@ -334,59 +334,63 @@
       </select> -->
         <!-- <label>Age of Children:</label>
       <input type="number" id="ageGroup" onchange="updateNames()" /> -->
-        <label>Age Group:</label>
-        <select id="ageGroup" name="ageGroup" onchange="updateNames()">
-          <option value="">Select Age Group</option>
-          <option value="3 - 5">3 - 5</option>
-          <option value="6 - 8">6 - 8</option>
-          <option value="9 - 12">9 - 12</option>
-          <option value="13+">13+</option>
-        </select>
-        <br /><br />
+        <div id="childrenWrapper">
+          <label>Age Group:</label>
+          <select id="ageGroup" name="ageGroup" onchange="updateNames()">
+            <option value="">Select Age Group</option>
+            <option value="3 - 5">3 - 5</option>
+            <option value="6 - 8">6 - 8</option>
+            <option value="9 - 12">9 - 12</option>
+            <option value="13+">13+</option>
+          </select>
+          <br /><br />
 
-        <!-- Gender -->
-        <label>Gender:</label>
-        <select id="gender" onchange="updateNames()">
-          <option value="">Select Gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
+          <!-- Gender -->
+          <label>Gender:</label>
+          <select id="gender" onchange="updateNames()">
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
 
-        <!-- Children -->
-        <label>Children:</label>
-        <div id="children" class="checkbox-group" required></div>
-
+          <!-- Children -->
+          <label>Children:</label>
+          <div id="children" class="checkbox-group" required></div>
+        </div>
         <!-- Volunteers -->
-        <label>Volunteers:</label>
-        <div id="volunteers" class="checkbox-group" required></div>
-
+        <div id="volunteersWrapper">
+          <label>Volunteers:</label>
+          <div id="volunteers" class="checkbox-group" required></div>
+        </div>
         <!-- Staff -->
-        <label>Staff:</label>
-        <div class="checkbox-group">
-          <label
-            ><input type="checkbox" value="Jesu" class="staffCheckbox" />
-            Jesu</label
-          >
-          <label
-            ><input type="checkbox" value="Arun" class="staffCheckbox" />
-            Arun</label
-          >
-          <label
-            ><input type="checkbox" value="Ruthvika" class="staffCheckbox" />
-            Ruthvika</label
-          >
-          <label
-            ><input type="checkbox" value="Shrenika" class="staffCheckbox" />
-            Shrenika</label
-          >
-          <label
-            ><input type="checkbox" value="Chandana" class="staffCheckbox" />
-            Chandana</label
-          >
-          <label
-            ><input type="checkbox" value="Archana" class="staffCheckbox" />
-            Archana</label
-          >
+        <div id="staffWrapper">
+          <label>Staff:</label>
+          <div class="checkbox-group">
+            <label
+              ><input type="checkbox" value="Jesu" class="staffCheckbox" />
+              Jesu</label
+            >
+            <label
+              ><input type="checkbox" value="Arun" class="staffCheckbox" />
+              Arun</label
+            >
+            <label
+              ><input type="checkbox" value="Ruthvika" class="staffCheckbox" />
+              Ruthvika</label
+            >
+            <label
+              ><input type="checkbox" value="Shrenika" class="staffCheckbox" />
+              Shrenika</label
+            >
+            <label
+              ><input type="checkbox" value="Chandana" class="staffCheckbox" />
+              Chandana</label
+            >
+            <label
+              ><input type="checkbox" value="Archana" class="staffCheckbox" />
+              Archana</label
+            >
+          </div>
           <label
             ><input
               type="checkbox"
@@ -435,8 +439,8 @@
           ],
           "Trainings / Exposure Visits": [
             "2-day training sessions",
-            "Weekend training sessions",
-            "Monthly training & review meetings",
+            "Weekend training sessions for volunteers",
+            "Monthly Training, planning and review meetings for project staff and volunteers",
             "Facilitating exposure trips",
           ],
           "Events, Materials, Formation of Groups, Setting up of Centres": [
@@ -476,11 +480,15 @@
       document.addEventListener("DOMContentLoaded", () => {
         const objective = document.getElementById("objective");
         const activity = document.getElementById("activity");
-
+        const indicator = document.getElementById("indicator");
+        indicator.addEventListener("change", updateForm);
         const locationWrapper = document.getElementById("locationWrapper");
         const customLocationWrapper = document.getElementById(
           "customLocationWrapper"
         );
+        const childrenWrapper = document.getElementById("childrenWrapper");
+        const volunteersWrapper = document.getElementById("volunteersWrapper");
+        const staffWrapper = document.getElementById("staffWrapper");
         const customLocation = document.getElementById("customLocation");
         const otherLocationWrapper = document.getElementById(
           "otherLocationWrapper"
@@ -494,6 +502,30 @@
         function updateForm() {
           const obj = objective.value;
           const act = activity.value;
+          const ind = indicator.value;
+          if (obj === "Objective 2" || obj === "Objective 3") {
+            staffWrapper.style.display = "none";
+          } else {
+            staffWrapper.style.display = "block";
+          }
+          const showGroups =
+            obj === "Objective 1" &&
+            act ===
+              "Events, Materials, Formation of Groups, Setting up of Centres" &&
+            ind === "Formation of adolescent groups";
+
+          document.getElementById("numberOfGroupsDiv").style.display =
+            showGroups ? "block" : "none";
+
+          const label = document.getElementById("uploadModuleLabel");
+
+          if (showGroups || obj === "Objective 2") {
+            label.textContent = "Upload Module/reports:";
+          } else if (obj === "Objective 3") {
+            label.textContent = "Upload Minutes of the Meeting:";
+          } else {
+            label.textContent = "Upload Module:";
+          }
 
           // --- Location Change for Obj1 Act2 ---
           if (obj === "Objective 1" && act === "Trainings / Exposure Visits") {
@@ -502,6 +534,52 @@
           } else {
             locationWrapper.style.display = "block";
             customLocationWrapper.style.display = "none";
+          }
+          if (
+            (obj === "Objective 1" &&
+              act === "Trainings / Exposure Visits" &&
+              (ind === "2-day training sessions" ||
+                ind === "Weekend training sessions for volunteers" ||
+                ind ===
+                  "Monthly Training, planning and review meetings for project staff and volunteers")) ||
+            (obj === "Objective 1" &&
+              act ===
+                "Events, Materials, Formation of Groups, Setting up of Centres" &&
+              (ind === "Setting up adolescent centres" ||
+                ind === "Sports engagement" ||
+                ind === "Developing module on Lifeskills & gender")) ||
+            (obj === "Objective 2" &&
+              act === "MHHM Activities" &&
+              (ind === "Upload health reports/records" ||
+                ind === "Procurement of MHHM materials" ||
+                ind === "Upgrading module on MHHM & diet" ||
+                ind === "2 medical check-ups by gynecologists")) ||
+            (obj === "Objective 3" &&
+              act === "Community Strengthening & Gender Sensitisation" &&
+              (ind === "Hosting 2 community events" ||
+                ind === "4 training sessions for slum committees"))
+          ) {
+            childrenWrapper.style.display = "none";
+          } else {
+            childrenWrapper.style.display = "block";
+          }
+
+          if (
+            (obj === "Objective 1" &&
+              act ===
+                "Events, Materials, Formation of Groups, Setting up of Centres" &&
+              (ind === "Setting up adolescent centres" ||
+                ind === "Formation of adolescent groups" ||
+                ind === "Developing module on Lifeskills & gender" ||
+                ind === "Sports engagement")) ||
+            (obj === "Objective 3" &&
+              act === "Community Strengthening & Gender Sensitisation" &&
+              (ind === "Hosting 2 community events" ||
+                ind === "4 training sessions for slum committees"))
+          ) {
+            volunteersWrapper.style.display = "none";
+          } else {
+            volunteersWrapper.style.display = "block";
           }
 
           // Show/hide "Other" location input
@@ -643,25 +721,28 @@
         updateConditionalFields();
       }
 
-      function updateConditionalFields() {
-        const obj = document.getElementById("objective").value;
-        const act = document.getElementById("activity").value;
-        const showGroups =
-          obj === "Objective 1" &&
-          act ===
-            "Events, Materials, Formation of Groups, Setting up of Centres";
+      // function updateConditionalFields() {
+      //   const obj = document.getElementById("objective").value;
+      //   const act = document.getElementById("activity").value;
+      //   const ind = document.getElementById("indicator").value;
 
-        document.getElementById("numberOfGroupsDiv").style.display = showGroups
-          ? "block"
-          : "none";
+      // const showGroups =
+      //   obj === "Objective 1" &&
+      //   act ===
+      //     "Events, Materials, Formation of Groups, Setting up of Centres";
 
-        const label = document.getElementById("uploadModuleLabel");
-        if (showGroups || obj === "Objective 2")
-          label.textContent = "Upload Module:";
-        else if (obj === "Objective 3")
-          label.textContent = "Upload Minutes of the Meeting:";
-        else label.textContent = "Upload Module:";
-      }
+      // document.getElementById("numberOfGroupsDiv").style.display = showGroups
+      //   ? "block"
+      //   : "none";
+
+      //   const label = document.getElementById("uploadModuleLabel");
+
+      //   if (showGroups || obj === "Objective 2")
+      //     label.textContent = "Upload Module:";
+      //   else if (obj === "Objective 3")
+      //     label.textContent = "Upload Minutes of the Meeting:";
+      //   else label.textContent = "Upload Module:";
+      //
 
       function toggleOtherStaff() {
         const checked = Array.from(
