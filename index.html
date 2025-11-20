@@ -91,9 +91,11 @@
       }
 
       button.loading::after {
-        content: " ⏳";
+        content: "Uploading Data, Please Wait ⏳";
       }
-
+      button.loading span {
+        display: none;
+      }
       .checkbox-group {
         display: flex;
         flex-direction: column; /* stack vertically */
@@ -414,7 +416,9 @@
           <label id="uploadModuleLabel">Upload Module:</label>
           <input type="file" id="uploadModule" accept=".pdf,.doc,.docx,.pptx" />
         </div>
-        <button type="button" onclick="submitForm()">Submit</button>
+        <button type="button" onclick="submitForm()">
+          <span>Submit</span>
+        </button>
         <div id="statusMessage"></div>
       </form>
     </div>
