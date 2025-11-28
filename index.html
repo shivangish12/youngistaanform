@@ -808,6 +808,8 @@
 
       async function submitForm() {
         // Clear all previous errors
+        clearErrors();
+
         function clearErrors() {
           document.querySelectorAll(".error-msg").forEach((el) => {
             el.style.display = "none";
@@ -831,11 +833,6 @@
 
         const submitBtn = document.querySelector("button");
         const statusBox = document.getElementById("statusMessage");
-
-        const objective = document.getElementById("objective").value;
-        const activity = document.getElementById("activity").value;
-        const indicator = document.getElementById("indicator").value;
-        const date = document.getElementById("date").value;
 
         // Location handling (normal or custom)
         const location = document.getElementById("location").value;
@@ -873,30 +870,34 @@
 
         // Objective
         if (!objectiveField.value) {
+          showError("objective", "Please select an objective.");
           document.getElementById("objectiveError").textContent =
             "Please select an objective.";
-          firstError = firstError || "Objective is required.";
+          firstError = firstError || "Please fill in all the required fields.";
         }
 
         // Activity
         if (!activityField.value) {
           document.getElementById("activityError").textContent =
             "Please select an activity.";
-          firstError = firstError || "Activity is required.";
+          firstError = firstError || "Please fill in all the required fields.";
+          showError("activity", "Please select an activity.");
         }
 
         // Indicator
         if (!indicatorField.value) {
           document.getElementById("indicatorError").textContent =
             "Please select an indicator.";
-          firstError = firstError || "Indicator is required.";
+          firstError = firstError || "Please fill in all the required fields.";
+          showError("indicator", "Please select an indicator.");
         }
 
         // Date
         if (!dateField.value) {
           document.getElementById("dateError").textContent =
             "Please select a date.";
-          firstError = firstError || "Date is required.";
+          firstError = firstError || "Please fill in all the required fields.";
+          showError("date", "Please select the date.");
         }
 
         // Location (normal or custom)
@@ -910,12 +911,15 @@
           if (!finalLocationCheck) {
             document.getElementById("locationError").textContent =
               "Please enter the location.";
-            firstError = firstError || "Location is required.";
+            firstError =
+              firstError || "Please fill in all the required fields.";
+            showError("location", "Please select the location.");
           }
         } else if (!locationField.value) {
           document.getElementById("locationError").textContent =
             "Please select a location.";
-          firstError = firstError || "Location is required.";
+          firstError = firstError || "Please fill in all the required fields.";
+          showError("location", "Please select the location.");
         }
 
         // Stop form if any field is missing
