@@ -188,6 +188,23 @@
         height: 45px; /* SMALLER */
         width: auto;
       }
+      .error-msg {
+        color: #d93025;
+        font-size: 13px;
+        margin-top: 4px;
+        display: none;
+      }
+      .required::after {
+        content: " *";
+        color: red;
+        font-weight: bold;
+      }
+
+      input.error,
+      select.error {
+        border: 1px solid #d93025 !important;
+        background: #fff6f6;
+      }
 
       /* Animation */
       @keyframes popIn {
@@ -265,18 +282,21 @@
           <option value="Objective 2">Objective 2</option>
           <option value="Objective 3">Objective 3</option>
         </select>
+        <div id="objectiveError" class="error-msg"></div>
 
         <!-- Activity -->
         <label class="required">Activity:</label>
         <select id="activity" onchange="updateIndicators()" required>
           <option value="">Select Activity</option>
         </select>
+        <div id="activityError" class="error-msg"></div>
 
         <!-- Indicator (single select) -->
         <label class="required">Indicator:</label>
         <select id="indicator" required>
           <option value="">Select Indicator</option>
         </select>
+        <div id="indicatorError" class="error-msg"></div>
 
         <!-- Upload Photo -->
         <div id="obj2Wrapper">
@@ -286,15 +306,18 @@
           <!-- Date -->
           <label class="required">Date:</label>
           <input type="date" id="date" required />
+          <div id="dateError" class="error-msg"></div>
 
           <!-- Location -->
           <div id="locationWrapper">
-            <label>Location:</label>
-            <select id="location" onchange="updateNames()">
+            <label class="required">Location:</label>
+            <select id="location" onchange="updateNames()" required>
               <option value="">Select Location</option>
             </select>
           </div>
         </div>
+        <div id="locationError" class="error-msg"></div>
+
         <!-- <label>Location:</label>
       <select id="locationob1act2" style="display: none">
         <option value="">Select Location</option>
@@ -327,7 +350,7 @@
         </div>
         <div id="childrenWrapper">
           <!-- Session Number -->
-          <label class="required" id="sessionLabel">Session Number:</label>
+          <label id="sessionLabel">Session Number:</label>
           <input type="number" id="sessionNumber" required />
 
           <!-- Age group -->
@@ -784,6 +807,28 @@
       }
 
       async function submitForm() {
+        // Clear all previous errors
+        function clearErrors() {
+          document.querySelectorAll(".error-msg").forEach((el) => {
+            el.style.display = "none";
+            el.textContent = "";
+          });
+
+          document.querySelectorAll(".error").forEach((el) => {
+            el.classList.remove("error");
+          });
+        }
+
+        // Show error under a specific field
+        function showError(fieldId, message) {
+          const field = document.getElementById(fieldId);
+          const errorBox = document.getElementById(fieldId + "Error");
+
+          field.classList.add("error");
+          errorBox.textContent = message;
+          errorBox.style.display = "block";
+        }
+
         const submitBtn = document.querySelector("button");
         const statusBox = document.getElementById("statusMessage");
 
@@ -808,11 +853,74 @@
           }
         }
 
-        // REQUIRED FIELDS CHECK
-        if (!objective || !activity || !indicator || !finalLocation || !date) {
-          alert(
-            "Please fill all required fields: Objective, Activity, Indicator, Location, and Date."
-          );
+        // --- REQUIRED FIELD VALIDATION (Inline + Alert) ---
+
+        // Clear old error messages
+        document
+          .querySelectorAll(".error-msg")
+          .forEach((el) => (el.textContent = ""));
+
+        // Get fields
+        const objectiveField = document.getElementById("objective");
+        const activityField = document.getElementById("activity");
+        const indicatorField = document.getElementById("indicator");
+        const dateField = document.getElementById("date");
+        const locationField = document.getElementById("location");
+        const customLocField = document.getElementById("customLocation");
+
+        // Track first missing field for alert
+        let firstError = null;
+
+        // Objective
+        if (!objectiveField.value) {
+          document.getElementById("objectiveError").textContent =
+            "Please select an objective.";
+          firstError = firstError || "Objective is required.";
+        }
+
+        // Activity
+        if (!activityField.value) {
+          document.getElementById("activityError").textContent =
+            "Please select an activity.";
+          firstError = firstError || "Activity is required.";
+        }
+
+        // Indicator
+        if (!indicatorField.value) {
+          document.getElementById("indicatorError").textContent =
+            "Please select an indicator.";
+          firstError = firstError || "Indicator is required.";
+        }
+
+        // Date
+        if (!dateField.value) {
+          document.getElementById("dateError").textContent =
+            "Please select a date.";
+          firstError = firstError || "Date is required.";
+        }
+
+        // Location (normal or custom)
+        let finalLocationCheck = locationField.value;
+        if (
+          document.getElementById("customLocationWrapper").style.display ===
+          "block"
+        ) {
+          finalLocationCheck = customLocField.value;
+
+          if (!finalLocationCheck) {
+            document.getElementById("locationError").textContent =
+              "Please enter the location.";
+            firstError = firstError || "Location is required.";
+          }
+        } else if (!locationField.value) {
+          document.getElementById("locationError").textContent =
+            "Please select a location.";
+          firstError = firstError || "Location is required.";
+        }
+
+        // Stop form if any field is missing
+        if (firstError) {
+          alert(firstError); // Show alert for first missing field
           return;
         }
 
