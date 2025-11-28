@@ -746,6 +746,8 @@
           label.textContent = "Upload Module/reports:";
         else if (obj === "Objective 3")
           label.textContent = "Upload Minutes of the Meeting:";
+        else if (obj === "Objective 1" && ind == "SEL Sessions for Adolescents")
+          label.textContent = "Reflections";
         else label.textContent = "Upload Module:";
       }
 
@@ -784,6 +786,35 @@
       async function submitForm() {
         const submitBtn = document.querySelector("button");
         const statusBox = document.getElementById("statusMessage");
+
+        const objective = document.getElementById("objective").value;
+        const activity = document.getElementById("activity").value;
+        const indicator = document.getElementById("indicator").value;
+        const date = document.getElementById("date").value;
+
+        // Location handling (normal or custom)
+        const location = document.getElementById("location").value;
+        const customLocationWrapper = document.getElementById(
+          "customLocationWrapper"
+        );
+
+        let finalLocation = location;
+
+        if (customLocationWrapper.style.display === "block") {
+          finalLocation = document.getElementById("customLocation").value;
+          if (!finalLocation) {
+            alert("Please select a location.");
+            return;
+          }
+        }
+
+        // REQUIRED FIELDS CHECK
+        if (!objective || !activity || !indicator || !finalLocation || !date) {
+          alert(
+            "Please fill all required fields: Objective, Activity, Indicator, Location, and Date."
+          );
+          return;
+        }
 
         // Reset message box
         statusBox.style.display = "none";
